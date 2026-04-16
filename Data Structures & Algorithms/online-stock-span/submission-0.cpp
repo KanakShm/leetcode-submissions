@@ -5,24 +5,24 @@ public:
     }
     
     int next(int price) {
-        std::stack<int> stocks_cpy = stocks;
-        int res = 0;
-        while (!stocks_cpy.empty() && price >= stocks_cpy.top()) {
-            res++;
-            stocks_cpy.pop();
+        int res = 1;
+        while (!stocks.empty() && stocks.top().first <= price) {
+            res += stocks.top().second;
+            stocks.pop();
         }
-        
-        stocks.push(price);
-        return res + 1;
+
+        stocks.push(std::make_pair(price, res));
+        return res;
     }
 
-    std::stack<int> stocks;
+    std::stack<std::pair<int, int>> stocks;
     /*
-        only need the last 4 days of stocks
-        consecutive days
-        stack
-        push to stack, make a copy, pop from the stack until we find a number greater
-        return the amount of numbers less than + 1
+        each stock contains its own span
+        stack contains price, span
+        pop until the price is less than top of stack
+        append price, span to stack
+        return span
+        span updates += top of stack's span every time we pop
     */
 };
 
